@@ -1,0 +1,148 @@
+.me-0 {
+  margin: 0 0 0 16px !important;
+}
+
+.user-dropdown {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 24px;
+  padding: 0.4rem 1rem 0.4rem 0.8rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s, border-color 0.2s;
+  min-width: 140px;
+  color: #3a231a;
+  &:hover, &:focus {
+    box-shadow: 0 4px 16px rgba(168,93,59,0.10);
+    border-color: #a85d3b;
+    background: #f8f9fa;
+  }
+  .ti-user {
+    background: #a85d3b;
+    color: #fff;
+    border-radius: 50%;
+    padding: 6px;
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+    box-shadow: 0 2px 6px rgba(168,93,59,0.10);
+  }
+  .user-name {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-right: 0.5rem;
+  }
+  .ti-chevron-down {
+    font-size: 1rem;
+    color: #a85d3b;
+    margin-left: 0.5rem;
+  }
+}
+
+.dropdown-menu {
+  min-width: 160px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(168,93,59,0.10);
+  border: 1px solid #e9ecef;
+  padding: 0.5rem 0;
+}
+
+.dropdown-item {
+  font-weight: 500;
+  color: #a85d3b;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+  &:hover, &:focus {
+    background: #f8f9fa;
+    color: #3a231a;
+  }
+  i {
+    font-size: 1.1rem;
+  }
+}
+
+.dropdown-notification {
+  min-width: 340px;
+  max-width: 400px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(168,93,59,0.10);
+  border: 1px solid #e9ecef;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  background: #fff;
+}
+
+.list-group-item-action {
+  transition: background 0.2s;
+  border-radius: 12px;
+  margin-bottom: 0.3rem;
+  &:hover, &:focus {
+    background: #f8f9fa;
+  }
+}
+
+.user-avtar, .user-avtar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(168,93,59,0.08);
+  background: #f5f5f5;
+}
+
+.list-group-item h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+  color: #3a231a;
+}
+
+.list-group-item p {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin-bottom: 0.3rem;
+}
+
+.badge {
+  font-size: 0.75rem;
+  margin-right: 0.3rem;
+  margin-top: 0.2rem;
+}
+
+.float-end.text-muted {
+  font-size: 0.85rem;
+  margin-bottom: 0.2rem;
+}
+
+.notification-file {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dropdown-header h5 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #a85d3b;
+  margin-bottom: 0.2rem;
+}
+
+@media (max-width: 500px) {
+  .dropdown-notification {
+    min-width: 220px;
+    max-width: 98vw;
+    padding: 0.2rem;
+  }
+  .user-avtar, .user-avtar img {
+    width: 32px;
+    height: 32px;
+  }
+  .list-group-item h5 {
+    font-size: 0.95rem;
+  }
+}

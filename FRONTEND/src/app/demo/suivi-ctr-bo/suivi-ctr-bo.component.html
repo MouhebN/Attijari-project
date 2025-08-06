@@ -1,0 +1,304 @@
+ <div class="container-fluid">
+  <!-- En-tête de la page -->
+  <div class="row">
+    <div class="col-12">
+      <div class="page-title-box">
+        <div class="page-title-right">
+          <ol class="breadcrumb m-0">
+            <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+            <li class="breadcrumb-item active">Suivi CTR/Carthago</li>
+          </ol>
+        </div>
+        <h4 class="page-title">Suivi CTR/Carthago</h4>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message d'erreur -->
+  <div class="row" *ngIf="errorMessage">
+    <div class="col-12">
+      <div class="alert alert-danger">
+        <i class="mdi mdi-alert-circle"></i> {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Indicateur de chargement -->
+  <div class="row" *ngIf="isLoading">
+    <div class="col-12 text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistiques générales -->
+  <div class="row">
+    <div class="col-xl-3 col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5 class="text-muted fw-normal mt-0" title="Nombre total de comparaisons">Total Comparaisons</h5>
+              <h3 class="mt-3 mb-3">{{ stats.totalComparaisons || 0 }}</h3>
+            </div>
+            <div class="avatar-sm">
+              <span class="avatar-title bg-soft-primary rounded">
+                <i class="mdi mdi-chart-line font-20 text-primary"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5 class="text-muted fw-normal mt-0" title="Comparaisons OK">Comparaisons OK</h5>
+              <h3 class="mt-3 mb-3 text-success">{{ stats.comparaisonsOK || 0 }}</h3>
+            </div>
+            <div class="avatar-sm">
+              <span class="avatar-title bg-soft-success rounded">
+                <i class="mdi mdi-check-circle font-20 text-success"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5 class="text-muted fw-normal mt-0" title="Comparaisons KO">Comparaisons KO</h5>
+              <h3 class="mt-3 mb-3 text-danger">{{ stats.comparaisonsKO || 0 }}</h3>
+            </div>
+            <div class="avatar-sm">
+              <span class="avatar-title bg-soft-danger rounded">
+                <i class="mdi mdi-alert-circle font-20 text-danger"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5 class="text-muted fw-normal mt-0" title="Taux de concordance">Taux Concordance</h5>
+              <h3 class="mt-3 mb-3 text-info">{{ (stats.tauxConcordance || 0) | number:'1.1-1' }}%</h3>
+            </div>
+            <div class="avatar-sm">
+              <span class="avatar-title bg-soft-info rounded">
+                <i class="mdi mdi-percent font-20 text-info"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graphiques -->
+  <div class="row">
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="header-title">Répartition Dépôts/Rejets</h4>
+          <div id="chart-deposits-rejects" style="height: 300px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-6">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="header-title">Évolution des Montants</h4>
+          <div id="chart-amounts-evolution" style="height: 300px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tableau des comparaisons -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="header-title">Comparaisons CTR/Carthago</h4>
+            <button class="btn btn-primary" (click)="refreshData()" [disabled]="isLoading">
+              <i class="mdi mdi-refresh" [class.mdi-spin]="isLoading"></i> Actualiser
+            </button>
+          </div>
+
+          <!-- Filtres -->
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <label class="form-label">Statut</label>
+              <select class="form-select" [(ngModel)]="filterStatus" (change)="applyFilters()">
+                <option value="">Tous</option>
+                <option value="Y">OK</option>
+                <option value="N">KO</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Date</label>
+              <input type="date" class="form-control" [(ngModel)]="filterDate" (change)="applyFilters()">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Recherche</label>
+              <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Nom fichier..." (input)="applyFilters()">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">&nbsp;</label>
+              <button class="btn btn-outline-secondary d-block" (click)="clearFilters()">
+                <i class="mdi mdi-filter-remove"></i> Effacer filtres
+              </button>
+            </div>
+          </div>
+
+          <!-- Message si aucun résultat -->
+          <div class="alert alert-info text-center" *ngIf="filteredComparaisons.length === 0 && !isLoading">
+            <i class="mdi mdi-information"></i> Aucune comparaison trouvée avec les filtres appliqués.
+          </div>
+
+          <!-- Tableau -->
+          <div class="table-responsive" *ngIf="filteredComparaisons.length > 0">
+            <table class="table table-centered table-striped dt-responsive nowrap w-100">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Fichier</th>
+                  <th>Carthago</th>
+                  <th>Date</th>
+                  <th>Nombre OK</th>
+                  <th>Montant OK</th>
+                  <th>Nb Carthago</th>
+                  <th>Montant Carthago</th>
+                  <th>Nb Fichier</th>
+                  <th>Montant Fichier</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ctr of filteredComparaisons.slice(startIndex, endIndex)">
+                  <td>{{ ctr.id }}</td>
+                  <td>
+                    <span class="badge bg-primary">{{ ctr.fichier?.nomFichier || 'N/A' }}</span>
+                  </td>
+                  <td>
+                    <span class="badge bg-info">{{ ctr.carthago?.nomFichier || 'N/A' }}</span>
+                  </td>
+                  <td>{{ ctr.createdAt | date:'dd/MM/yyyy' }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="ctr.nombreOk === 'Y' ? 'bg-success' : 'bg-danger'">
+                      {{ ctr.nombreOk }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge" [ngClass]="ctr.montantOk === 'Y' ? 'bg-success' : 'bg-danger'">
+                      {{ ctr.montantOk }}
+                    </span>
+                  </td>
+                  <td>{{ ctr.nombreTotalCarthago | number:'1.0-0' }}</td>
+                  <td>{{ ctr.montantTotalCarthago | number:'1.2-2' }} DT</td>
+                  <td>{{ ctr.nombreFichier | number:'1.0-0' }}</td>
+                  <td>{{ ctr.montantFichier | number:'1.2-2' }} DT</td>
+                  <td>
+                    <div class="btn-group btn-group-sm">
+                      <button class="btn btn-outline-primary" (click)="viewDetails(ctr)" title="Voir détails">
+                        <i class="mdi mdi-eye"></i>
+                      </button>
+                      <button class="btn btn-outline-warning" (click)="editComparison(ctr)" title="Éditer">
+                        <i class="mdi mdi-pencil"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div class="d-flex justify-content-between align-items-center mt-3" *ngIf="filteredComparaisons.length > 0">
+            <div>
+              Affichage {{ startIndex + 1 }}-{{ endIndex }} sur {{ totalItems }} résultats
+            </div>
+            <nav *ngIf="totalPages > 1">
+              <ul class="pagination pagination-sm mb-0">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                  <a class="page-link" (click)="changePage(currentPage - 1)" style="cursor: pointer;">Précédent</a>
+                </li>
+                <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
+                  <a class="page-link" (click)="changePage(page)" style="cursor: pointer;">{{ page }}</a>
+                </li>
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                  <a class="page-link" (click)="changePage(currentPage + 1)" style="cursor: pointer;">Suivant</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal pour les détails -->
+  <div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Détails de la comparaison #{{ selectedComparison?.id }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" *ngIf="selectedComparison">
+          <div class="row">
+            <div class="col-md-6">
+              <h6 class="text-primary">Informations Fichier</h6>
+              <table class="table table-sm table-bordered">
+                <tr><td><strong>Nom:</strong></td><td>{{ selectedComparison.fichier?.nomFichier || 'N/A' }}</td></tr>
+                <tr><td><strong>Nombre:</strong></td><td>{{ selectedComparison.nombreFichier | number:'1.0-0' }}</td></tr>
+                <tr><td><strong>Montant:</strong></td><td>{{ selectedComparison.montantFichier | number:'1.2-2' }} DT</td></tr>
+              </table>
+            </div>
+            <div class="col-md-6">
+              <h6 class="text-info">Informations Carthago</h6>
+              <table class="table table-sm table-bordered">
+                <tr><td><strong>Nom:</strong></td><td>{{ selectedComparison.carthago?.nomFichier || 'N/A' }}</td></tr>
+                <tr><td><strong>Nombre Total:</strong></td><td>{{ selectedComparison.nombreTotalCarthago | number:'1.0-0' }}</td></tr>
+                <tr><td><strong>Montant Total:</strong></td><td>{{ selectedComparison.montantTotalCarthago | number:'1.2-2' }} DT</td></tr>
+                <tr><td><strong>Déposés:</strong></td><td>{{ selectedComparison.nombreDepCarthago | number:'1.0-0' }}</td></tr>
+                <tr><td><strong>Rejetés:</strong></td><td>{{ selectedComparison.nombreRejCarthago | number:'1.0-0' }}</td></tr>
+                <tr><td><strong>Montant Déposés:</strong></td><td>{{ selectedComparison.montantDepCarthago | number:'1.2-2' }} DT</td></tr>
+                <tr><td><strong>Montant Rejetés:</strong></td><td>{{ selectedComparison.montantRejCarthago | number:'1.2-2' }} DT</td></tr>
+              </table>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12">
+              <h6>Résultat de la comparaison</h6>
+              <div class="alert" [ngClass]="getComparisonStatusClass()">
+                <strong>Statut:</strong> {{ getComparisonStatusText() }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+          <button type="button" class="btn btn-primary" (click)="editComparison(selectedComparison!)">
+            <i class="mdi mdi-pencil"></i> Éditer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

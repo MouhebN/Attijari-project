@@ -1,0 +1,224 @@
+<div class="dashboard new-dashboard">
+  <!-- Filter Section (EV & Carthago selects) -->
+  <div class="filter-row">
+    <div class="filter-card">
+      <label>Fichier EV</label>
+      <select class="form-control" [(ngModel)]="selectedFichierId">
+        <option [ngValue]="0">-- Sélectionner un fichier EV --</option>
+        <option *ngFor="let f of fichiersOptions" [ngValue]="f.id">{{ f.nomFichier }}</option>
+      </select>
+    </div>
+    <div class="filter-card">
+      <label>Fichier Carthago</label>
+      <select class="form-control" [(ngModel)]="selectedCarthagoId">
+        <option [ngValue]="0">-- Sélectionner un fichier Carthago --</option>
+        <option *ngFor="let c of carthagoOptions" [ngValue]="c.id">{{ c.nomFichier }}</option>
+      </select>
+    </div>
+    <div class="filter-card btn-card">
+      <button class="btn btn-primary w-100" (click)="lancerComparaison()" [disabled]="loadingCTRs">Comparer</button>
+    </div>
+    <div class="filter-card btn-card">
+      <button class="btn btn-outline-secondary w-100" (click)="comparerTous()" [disabled]="loadingCTRs || loadingCompareAll">
+    <span *ngIf="!loadingCompareAll; else loadingAll">
+      Comparer tous les fichiers
+    </span>
+        <ng-template #loadingAll>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span>Traitement...</span>
+        </ng-template>
+      </button>
+    </div>
+
+  </div>
+  <div class="table-responsive modern-table" style="max-height: 480px; overflow-y: auto;">
+    <table class="table table-bordered mt-3 pro-table" *ngIf="!loadingCTRs && ctrs.length > 0">
+      <thead class="sticky-header">
+      <tr>
+        <th>Nom fichier</th>
+        <th>Nombre EV</th>
+        <th>Nombre Carthago</th>
+        <th>Nombre OK</th>
+        <th>Montant EV</th>
+        <th>Montant Carthago</th>
+        <th>Montant OK</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let ctr of ctrs">
+        <td [ngClass]="{'anomalie-cell': ctr.nombreOk === 'N' || ctr.montantOk === 'N'}">{{ ctr.nomFichier }}</td>
+        <td [ngClass]="{'anomalie-cell': ctr.nombreOk === 'N' || ctr.montantOk === 'N'}">{{ ctr.nombreFichier }}</td>
+        <td [ngClass]="{'anomalie-cell': ctr.nombreOk === 'N' || ctr.montantOk === 'N'}">{{ ctr.nombreTotalCarthago }}</td>
+        <td [ngClass]="{'anomalie-cell': ctr.nombreOk === 'N' || ctr.montantOk === 'N'}">
+          <span [class.text-success]="ctr.nombreOk === 'Y'" [class.text-danger]="ctr.nombreOk === 'N'">{{ ctr.nombreOk }}</span>
+        </td>
+        <td [ngClass]="{'anomalie-cell': ctr.nombreOk === 'N' || ctr.montantOk === 'N'}">{{ ctr.montantFichier | number: '1.2-2' }}</td>
+        <td [ngClass]="{'anomalie-cell': ctr.nombreOk === 'N' || ctr.montantOk === 'N'}">{{ ctr.montantTotalCarthago | number: '1.2-2' }}</td>
+        <td [ngClass]="{'anomalie-cell': ctr.nombreOk === 'N' || ctr.montantOk === 'N'}">
+          <span [class.text-success]="ctr.montantOk === 'Y'" [class.text-danger]="ctr.montantOk === 'N'">{{ ctr.montantOk }}</span>
+        </td>
+        <td>
+          <button class="btn btn-sm btn-danger" (click)="supprimerCTR(ctr.id)">
+            <i class="ti ti-trash"></i>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <br>
+  <br>
+  <br>
+  <br>
+
+
+  <div class="stats-cards-grid">
+      <!-- Taux de concordance interne -->
+      <div class="stat-card modern">
+        <div class="stat-icon-bg bg-gradient-blue">
+          <i class="ti ti-percentage"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-title">Concordance Interne</div>
+          <div class="stat-value big">
+        <span *ngIf="tauxConcordanceInterne !== null; else loading">
+          {{ tauxConcordanceInterne * 100 | number: '1.2-2' }}<span class="stat-unit">%</span>
+        </span>
+            <ng-template #loading>...</ng-template>
+          </div>
+          <div class="stat-desc">% des fichiers Carthago avec <b>NOMBRE_OK & MONTANT_OK = 'Y'</b></div>
+        </div>
+      </div>
+
+      <!-- Taux de concordance EV ↔ Carthago -->
+      <div class="stat-card modern">
+        <div class="stat-icon-bg bg-gradient-purple">
+          <i class="ti ti-percentage"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-title">Concordance EV ↔ Carthago</div>
+          <div class="stat-value big">
+        <span *ngIf="tauxConcordanceEV !== null; else loadingEV">
+          {{ tauxConcordanceEV * 100 | number: '1.2-2' }}<span class="stat-unit">%</span>
+        </span>
+            <ng-template #loadingEV>...</ng-template>
+          </div>
+          <div class="stat-desc">% de concordance entre EV et Carthago</div>
+        </div>
+      </div>
+
+      <!-- Chèques déposés -->
+      <div class="stat-card modern">
+        <div class="stat-icon-bg bg-gradient-cyan">
+          <i class="ti ti-arrow-down"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-title">Chèques Déposés</div>
+          <div class="stat-value">{{ repartitionEtat['DEPOSE'] ?? 0 }}</div>
+          <div class="stat-desc">Total des chèques avec état <b>DEPOSE</b></div>
+        </div>
+      </div>
+
+      <!-- Chèques rejetés -->
+      <div class="stat-card modern">
+        <div class="stat-icon-bg bg-gradient-red">
+          <i class="ti ti-x"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-title">Chèques Rejetés</div>
+          <div class="stat-value">{{ repartitionEtat['REJETE'] ?? 0 }}</div>
+          <div class="stat-desc">Total des chèques avec état <b>REJETE</b></div>
+        </div>
+      </div>
+
+      <!-- Montants par état -->
+      <div
+        class="stat-card modern"
+        *ngFor="let etat of getMontantsKeys()"
+        [ngClass]="{'is-depose': etat === 'DEPOSE', 'is-rejete': etat === 'REJETE'}">
+        <div class="stat-icon-bg bg-gradient-gold">
+          <i class="ti ti-currency-dollar"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-title">Montant {{ etat }}</div>
+          <div class="stat-value">{{ montantsEtat[etat] | number: '1.2-2' }}</div>
+          <div class="stat-desc">Montant total pour <b>{{ etat.toLowerCase() }}</b></div>
+        </div>
+      </div>
+    <!-- Carte Entête (Nombre et Montant) -->
+    <div class="stat-card modern">
+      <div class="stat-icon-bg bg-gradient-teal">
+        <i class="ti ti-file"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-title">Nombre Entête</div>
+        <div class="stat-value big">
+      <span *ngIf="enteteStats; else loadingEntete">
+        {{ enteteStats.totalNombreEntete | number }}
+      </span>
+          <ng-template #loadingEntete>...</ng-template>
+        </div>
+        <div class="stat-title">Montant Entête</div>
+        <div class="stat-value big">
+      <span *ngIf="enteteStats">
+        {{ enteteStats.totalMontantEntete | number:'1.2-2' }} DT
+      </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carte Remis (Nombre et Montant) -->
+    <div class="stat-card modern">
+      <div class="stat-icon-bg bg-gradient-green">
+        <i class="ti ti-banknote"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-title">Nombre Remis</div>
+        <div class="stat-value big">
+      <span *ngIf="remisStats; else loadingRemis">
+        {{ remisStats.totalRemis | number }}
+      </span>
+          <ng-template #loadingRemis>...</ng-template>
+        </div>
+        <div class="stat-title">Montant Remis</div>
+        <div class="stat-value big">
+      <span *ngIf="remisStats">
+        {{ remisStats.montantRemis | number:'1.2-2' }} DT
+      </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+
+  <div class="pie-chart-card">
+    <apx-chart
+      [series]="pieSeries"
+      [chart]="pieChart"
+      [labels]="pieLabels"
+      [responsive]="pieResponsive"
+      [legend]="pieLegend"
+      [dataLabels]="pieDataLabels">
+    </apx-chart>
+  </div>
+
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+    <!-- Bar Chart section (if needed) -->
+  <app-montant-bar-chart
+    [montantDepose]="montantsEtat['DEPOSE'] || 0"
+    [montantRejete]="montantsEtat['REJETE'] || 0">
+  </app-montant-bar-chart>
+</div>

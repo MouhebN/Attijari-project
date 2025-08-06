@@ -1,0 +1,94 @@
+// Copie du style cheque30.scss
+.cheque-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #a85d3b;
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
+}
+.table-modern {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(44,62,80,0.07);
+  overflow: hidden;
+}
+.table-modern thead th {
+  background: linear-gradient(90deg, #ffd600 0%, #e60028 100%);
+  color: #222;
+  font-weight: 700;
+  border: none;
+  font-size: 1.05rem;
+}
+.table-modern tbody tr {
+  border-bottom: 1px solid #f3e7e9;
+  transition: background 0.18s;
+}
+.table-modern tbody tr:hover {
+  background: #fffbe6;
+}
+.badge-nature {
+  background: #ede7f6;
+  color: #673ab7;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 0.35em 0.7em;
+  font-size: 0.95em;
+}
+.badge-type {
+  background: #e3f2fd;
+  color: #2196f3;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 0.35em 0.7em;
+  font-size: 0.95em;
+}
+.badge-sens-emis {
+  background: #e6f9ed;
+  color: #43a047;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.35em 0.7em;
+  font-size: 0.95em;
+  color: #000 !important;
+}
+.badge-sens-recu {
+  background: #ffeaea;
+  color: #e53935;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.35em 0.7em;
+  font-size: 0.95em;
+  color: #000 !important;
+}
+.cheque-row-anim {
+  animation: chequeFadeInUp 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+}
+@keyframes chequeFadeInUp {
+  0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+  60% { opacity: 0.7; transform: translateY(-8px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.btn-outline-primary {
+  border-color: #a85d3b;
+  color: #a85d3b;
+  background: #fff;
+  transition: background 0.18s, color 0.18s;
+}
+.btn-outline-primary:hover {
+  background: #a85d3b;
+  color: #fff;
+}
+.btn-outline-danger {
+  border-color: #e60028;
+  color: #e60028;
+  background: #fff;
+  transition: background 0.18s, color 0.18s;
+}
+.btn-outline-danger:hover {
+  background: #e60028;
+  color: #fff;
+}
+.badge {
+  --bs-badge-color: #1b1a1a !important;
+  color: #1b1a1a !important;
+}

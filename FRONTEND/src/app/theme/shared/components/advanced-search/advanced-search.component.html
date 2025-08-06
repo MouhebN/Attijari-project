@@ -1,0 +1,139 @@
+<div class="advanced-search-container">
+  <!-- Barre de recherche principale -->
+  <div class="search-bar">
+    <div class="search-input-group">
+      <div class="search-icon">
+        <i class="ti ti-search"></i>
+      </div>
+      <input 
+        type="text" 
+        class="form-control search-input" 
+        placeholder="Rechercher..."
+        (click)="toggleExpansion()">
+      <button 
+        type="button" 
+        class="btn btn-outline-primary search-toggle"
+        (click)="toggleExpansion()">
+        <i class="ti ti-filter"></i>
+        <span class="ms-1">Filtres</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Panneau de recherche avancée -->
+  <div class="advanced-search-panel" [class.expanded]="isExpanded">
+    <div class="search-filters">
+      <div class="row g-3">
+        <!-- Nom du fichier -->
+        <div class="col-md-3">
+          <label class="form-label">
+            <i class="ti ti-file-text me-2"></i>
+            Nom du fichier
+          </label>
+          <input 
+            type="text" 
+            class="form-control" 
+            [(ngModel)]="filters.nomFichier"
+            (input)="onFilterChange()"
+            placeholder="Rechercher par nom...">
+        </div>
+
+        <!-- Nombre -->
+        <div class="col-md-3">
+          <label class="form-label">
+            <i class="ti ti-numbers me-2"></i>
+            Nombre
+          </label>
+          <input 
+            type="number" 
+            class="form-control" 
+            [(ngModel)]="filters.nombre"
+            (input)="onFilterChange()"
+            placeholder="Rechercher par nombre..."
+            min="0">
+        </div>
+
+        <!-- Montant -->
+        <div class="col-md-3">
+          <label class="form-label">
+            <i class="ti ti-currency-dinar me-2"></i>
+            Montant
+          </label>
+          <input 
+            type="number" 
+            class="form-control" 
+            [(ngModel)]="filters.montant"
+            (input)="onFilterChange()"
+            placeholder="Rechercher par montant..."
+            min="0"
+            step="0.01">
+        </div>
+
+        <!-- Plage de dates -->
+        <div class="col-md-3" *ngIf="showDateRange">
+          <label class="form-label">
+            <i class="ti ti-calendar me-2"></i>
+            Date de début
+          </label>
+          <input 
+            type="date" 
+            class="form-control"
+            [ngModel]="getDateRangeStart()"
+            (ngModelChange)="setDateRangeStart($event); onFilterChange()">
+        </div>
+
+        <div class="col-md-3" *ngIf="showDateRange">
+          <label class="form-label">
+            <i class="ti ti-calendar me-2"></i>
+            Date de fin
+          </label>
+          <input 
+            type="date" 
+            class="form-control"
+            [ngModel]="getDateRangeEnd()"
+            (ngModelChange)="setDateRangeEnd($event); onFilterChange()">
+        </div>
+      </div>
+
+      <!-- Boutons d'action -->
+      <div class="search-actions mt-3">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="active-filters">
+            <span class="badge bg-primary me-2" *ngIf="filters.nomFichier">
+              Nom: {{ getNomFichier() }}
+              <i class="ti ti-x ms-1" (click)="clearFilter('nomFichier')"></i>
+            </span>
+            <span class="badge bg-info me-2" *ngIf="filters.nombre">
+              Nombre: {{ getNombre() }}
+              <i class="ti ti-x ms-1" (click)="clearFilter('nombre')"></i>
+            </span>
+            <span class="badge bg-warning me-2" *ngIf="filters.montant">
+              Montant: {{ getMontant() }}
+              <i class="ti ti-x ms-1" (click)="clearFilter('montant')"></i>
+            </span>
+            <span class="badge bg-success me-2" *ngIf="filters.dateRange?.start || filters.dateRange?.end">
+              Date: {{ getDateRangeStart() }} - {{ getDateRangeEnd() }}
+              <i class="ti ti-x ms-1" (click)="clearFilter('dateRange')"></i>
+            </span>
+          </div>
+          <div class="action-buttons">
+            <button 
+              type="button" 
+              class="btn btn-outline-secondary me-2"
+              (click)="resetFilters()">
+              <i class="ti ti-refresh me-1"></i>
+              Réinitialiser
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-primary"
+              (click)="applyFilters()">
+              <i class="ti ti-search me-1"></i>
+              Appliquer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

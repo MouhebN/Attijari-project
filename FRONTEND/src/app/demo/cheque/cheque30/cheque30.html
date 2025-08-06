@@ -1,0 +1,98 @@
+<div class="container mt-4">
+  <h2 class="cheque-title">Liste des fichiers - Chèque 30</h2>
+
+  <!-- Recherche avancée -->
+  <app-advanced-search
+    [showDateRange]="true"
+    (filtersChanged)="onSearchFiltersChanged($event)">
+  </app-advanced-search>
+
+  <!-- Statistiques -->
+  <div class="stats-section mb-4" *ngIf="fichiers.length > 0">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="stats-info">
+                <span class="badge bg-primary me-2">
+                  <i class="ti ti-file me-1"></i>
+                  Total: {{ getStats().totalFichiers }}
+                </span>
+                <span class="badge bg-success me-2">
+                  <i class="ti ti-calculator me-1"></i>
+                  Nombre total: {{ getStats().totalNombre }}
+                </span>
+                <span class="badge bg-info me-2">
+                  <i class="ti ti-currency-dollar me-1"></i>
+                  Montant total: {{ getStats().totalMontant | number:'1.2-2' }} DT
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="datatableOptions; else loading">
+    <app-advanced-datatable
+      [options]="datatableOptions"
+      [showSearchBar]="false"
+      [showActions]="true"
+      [showPagination]="true"
+      [showStats]="true"
+      [itemsPerPage]="10"
+      (editItem)="onEditFichier($event)"
+       (deleteItem)="onDeleteFichier($event)">
+    </app-advanced-datatable>
+
+  </div>
+ <div class="modal-backdrop" *ngIf="isEditModalOpen">
+  <div class="modal modal-content">
+              <img src="assets/images/logoAttijari.png" alt="Logo Attijari Bank" class="logo" style="height: 40px; width: auto; border-radius: 12px; box-shadow: 0 2px 12px rgba(34,34,34,0.10); background: #fff;" />
+
+    <h4 class="modal-title">Modifier le fichier</h4>
+
+    <div class="form-group mb-2">
+      <label class="form-label">Nom du fichier (sans extension)</label>
+      <input class="form-control" [(ngModel)]="nomFichierBase" placeholder="Nom du fichier" />
+    </div>
+
+    <div class="form-group mb-2">
+      <label class="form-label">Code Valeur</label>
+      <input class="form-control" [(ngModel)]="fichierSelectionne!.codeValeur" placeholder="ex: 30" />
+    </div>
+
+    <div class="form-group mb-2">
+      <label class="form-label">Code EN</label>
+      <input class="form-control" [(ngModel)]="fichierSelectionne!.codEn" />
+    </div>
+
+    <div class="form-group mb-2">
+      <label class="form-label">Nombre</label>
+      <input type="number" class="form-control" [(ngModel)]="fichierSelectionne!.nombre" />
+    </div>
+
+    <div class="form-group mb-2">
+      <label class="form-label">Montant</label>
+      <input type="number" class="form-control" [(ngModel)]="fichierSelectionne!.montant" />
+    </div>
+
+    <div class="modal-footer mt-3 d-flex justify-content-end">
+      <button class="btn btn-secondary" (click)="fermerEditModal()">Annuler</button>
+      <button class="btn btn-primary" (click)="sauvegarderModificationsFichier()">Mettre à jour</button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Loading -->
+  <ng-template #loading>
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2">Chargement des fichiers...</p>
+    </div>
+  </ng-template>
+</div>

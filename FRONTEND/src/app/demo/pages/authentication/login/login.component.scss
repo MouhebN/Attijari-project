@@ -1,0 +1,32 @@
+body, .auth-main {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #f3e7e9 50%, #a85d3b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bgFadeIn 1.2s ease;
+}
+
+@keyframes bgFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.d-flex.flex-column.align-items-center.mb-4 img {
+  animation: logoPop 1s cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+@keyframes logoPop {
+  0% { transform: scale(0.7) rotate(-10deg); opacity: 0; }
+  60% { transform: scale(1.1) rotate(3deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); }
+}
+
+.d-flex.flex-column.align-items-center.mb-4 h2, .d-flex.flex-column.align-items-center.mb-4 p {
+  animation: fadeInUp 1s 0.3s both;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+} 

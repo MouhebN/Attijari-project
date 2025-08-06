@@ -1,0 +1,192 @@
+/**  =====================
+      Custom css start
+==========================  **/
+
+* {
+  &:focus {
+    outline: none;
+  }
+}
+.accordion {
+  --#{$prefix}accordion-color: #{$body-color};
+}
+a {
+  &:hover {
+    outline: none;
+    text-decoration: none;
+  }
+
+  &:not([href]) {
+    color: inherit;
+  }
+}
+
+p {
+  font-size: 14px;
+}
+
+b,
+strong {
+  font-weight: 600;
+}
+
+.btn-page {
+  .btn {
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+  .btn-group {
+    .btn {
+      margin-right: 0;
+      margin-bottom: 0;
+    }
+  }
+}
+
+/* ========================================================
+ ===============     document      ======================
+ ========================================================*/
+
+.color-card {
+  .card-body {
+    margin: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+    background: rgba(107, 117, 125, 0.08);
+    border-radius: $border-radius;
+  }
+}
+.color-block {
+  border-radius: $border-radius;
+  margin: 4px 0;
+  @each $name, $value in $more-colors {
+    $i: 100;
+    @while $i<=900 {
+      &.bg-#{$name}-#{$i} {
+        color: color-contrast(map-get($value, $i));
+      }
+      &.text-#{$name}-#{$i} {
+        background-color: color-contrast(map-get($value, $i));
+      }
+      $i: $i + 100;
+    }
+  }
+}
+
+// Gradients pour le datatable avancé
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.bg-gradient-success {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+}
+
+.bg-gradient-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%) !important;
+}
+
+.bg-gradient-info {
+  background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%) !important;
+}
+
+// Classes utilitaires pour les animations
+.table-row-anim {
+  animation: tableRowFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes tableRowFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Styles pour les badges avancés
+.badge {
+  &.badge-nature {
+    background: linear-gradient(135deg, #ede7f6 0%, #d1c4e9 100%);
+    color: #512da8;
+  }
+  
+  &.badge-type {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    color: #1565c0;
+  }
+  
+  &.badge-sens-emis {
+    background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+    color: #2e7d32;
+  }
+  
+  &.badge-sens-recu {
+    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+    color: #c62828;
+  }
+}
+
+// Styles pour les boutons avancés
+.btn {
+  &.btn-outline-primary {
+    border-color: #667eea;
+    color: #667eea;
+    
+    &:hover {
+      background: #667eea;
+      border-color: #667eea;
+    }
+  }
+  
+  &.btn-outline-info {
+    border-color: #17a2b8;
+    color: #17a2b8;
+    
+    &:hover {
+      background: #17a2b8;
+      border-color: #17a2b8;
+    }
+  }
+  
+  &.btn-outline-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+    
+    &:hover {
+      background: #dc3545;
+      border-color: #dc3545;
+    }
+  }
+}
+
+// Styles pour la pagination avancée
+.pagination {
+  .page-link {
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    color: #667eea;
+    padding: 0.5rem 0.75rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    
+    &:hover {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-color: #667eea;
+      color: white;
+      transform: translateY(-1px);
+    }
+  }
+  
+  .page-item.active .page-link {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+    color: white;
+  }
+  
+  .page-item.disabled .page-link {
+    color: #6c757d;
+    background: #f8f9fa;
+    border-color: #e9ecef;
+  }
+}
